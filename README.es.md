@@ -1,71 +1,48 @@
-# Herramienta de Apagado Automático para ESXi
+# Herramienta Automatizada de Gestión ESXi
 
-**Autor:** Issam Chouaib  
-**Licencia:** Distribución libre (MIT)
+Esta utilidad proporciona una interfaz gráfica (GUI) para la gestión automatizada de hosts VMware ESXi, permitiendo el apagado o reinicio controlado del servidor y todas las máquinas virtuales en ejecución. Utiliza `plink.exe` para conexiones SSH y está orientada a facilitar operaciones masivas con trazabilidad y seguridad.
 
----
+## Características
 
-## Descripción
-
-Utilidad gráfica (GUI) para Windows que permite apagar o reiniciar de forma segura servidores VMware ESXi y sus máquinas virtuales (VMs) en ejecución, todo mediante SSH.
-
-- 100% portable y ejecutable en cualquier equipo Windows.
-- Desarrollada en PowerShell.
-- Integra Plink de PuTTY para gestión segura por SSH.
-- La ventana de consola se oculta automáticamente para una experiencia de usuario profesional.
-
----
-
-## Funcionalidades principales
-
-- Detección y listado de máquinas virtuales encendidas.
-- Apagado controlado (graceful shutdown) de cada VM; si falla, realiza apagado forzado.
-- Apagado o reinicio del host ESXi tras finalizar con las VMs.
-- Historial de IPs utilizadas, con opción para limpiar el historial.
-- Validación de credenciales antes de ejecutar cualquier acción.
-- Toda la operación y logs se visualizan en una interfaz amigable.
-- No requiere PowerCLI ni cliente vSphere local.
-
----
+- Apagado controlado (o forzado, si es necesario) de todas las VMs en ejecución.
+- Apagado o reinicio del host ESXi tras la gestión de las VMs.
+- Detección y gestión automática del fingerprint SSH del host.
+- Generación de log de credenciales y ejecución para trazabilidad completa.
+- Historial persistente de IPs de hosts ESXi para acceso rápido.
+- Interfaz gráfica nativa con Windows Forms (.NET) (solo requiere `plink.exe`).
 
 ## Requisitos
 
-- **Sistema operativo:** Windows 7, 8, 10 u 11 (x86/x64)
-- **Servidor ESXi:** con SSH habilitado
-- **Plink.exe:** incluido en el paquete o descargable desde [página oficial de PuTTY](https://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html)
+- Windows con PowerShell 5.1 o superior.
+- `plink.exe` (de la suite PuTTY) en el mismo directorio que el script.
+- Conectividad de red al host ESXi por SSH (TCP/22).
+- Credenciales con privilegios de apagado/reinicio sobre el host ESXi.
 
----
+## Funcionamiento
+
+1. **Gestión del fingerprint SSH**: El script intenta detectar y usar el fingerprint SSH del host. Si no se detecta, se asume que ya está confiado en el sistema.
+2. **Verificación de credenciales**: Se comprueban las credenciales antes de ejecutar cualquier acción.
+3. **Gestión de máquinas virtuales**: Se intenta un apagado controlado de todas las VMs. Si alguna no responde, se fuerza el apagado.
+4. **Acción sobre el host**: Según la selección, el host ESXi será apagado o reiniciado de forma controlada.
+5. **Log de operaciones**: Todas las acciones, errores y salidas se registran en `esxi_manager.log` en el directorio del script.
+6. **Historial de IPs**: Los hosts gestionados quedan guardados para acceso rápido posterior.
 
 ## Uso
 
-1. Descarga el ejecutable o compílalo utilizando el script proporcionado y plink.exe.
-2. Ejecuta la herramienta en cualquier equipo Windows.
-3. Introduce la IP del servidor ESXi, usuario (por defecto: `root`) y contraseña.
-4. Selecciona si deseas apagar o reiniciar el host.
-5. Pulsa el botón `Execute`. El proceso será:
-    - Validar conectividad y credenciales.
-    - Apagar todas las VMs en ejecución de forma segura.
-    - Si una VM no apaga en 1 minuto, se forzará el apagado.
-    - Apagar o reiniciar el host según tu elección.
-6. El estado y los logs se mostrarán en la ventana inferior de la aplicación.
+1. Copie `plink.exe` y el script en el mismo directorio.
+2. Ejecute el script PowerShell (`.ps1`) con permisos adecuados.
+3. Introduzca la IP, usuario y contraseña del host ESXi. Elija **Shutdown** o **Reboot**.
+4. Pulse **Execute**. Aparecerá un mensaje de advertencia para confirmar la operación.
+5. El script gestionará las VMs y el host según corresponda. Consulte `esxi_manager.log` para el registro completo.
 
----
+## Seguridad y recomendaciones
 
-## Avisos de seguridad
+- Las credenciales **no se almacenan en texto claro** en el log.
+- Todas las operaciones quedan registradas para auditoría.
+- Se recomienda realizar pruebas en entorno controlado antes de utilizar en producción.
+- El script se distribuye de forma libre para su uso y modificación.
 
-- Las contraseñas **no se almacenan ni se registran**.
-- Todo el tráfico SSH se realiza a través de Plink (PuTTY).
-- **Utiliza la herramienta solo en entornos y redes de confianza**.
+## Autor
 
----
-
-## Licencia
-
-Distribución libre bajo licencia MIT. Consulta el archivo LICENSE para más detalles.
-
----
-
-## Créditos
-
-Desarrollado por Issam Chouaib.  
-Incluye componentes de PuTTY/Plink bajo su propia licencia.
+Issam Chouaib  
+Licencia para distribución gratuita.
