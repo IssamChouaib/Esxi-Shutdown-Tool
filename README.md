@@ -1,39 +1,39 @@
 # ESXi Automated Management Tool
 
-This tool provides a graphical interface (GUI) for automated management of VMware ESXi hosts, including the controlled shutdown or reboot of the server and all running virtual machines. The tool leverages `plink.exe` for SSH connections and is designed to simplify mass operations while maintaining traceability and security.
+This utility provides a graphical user interface (GUI) for the automated management of VMware ESXi hosts, allowing controlled or forced shutdown/reboot of the server and all running virtual machines. The solution is delivered as a self-extracting executable (SFX) for maximum ease of deployment.
+
+## Self-Extracting Executable (SFX)
+
+The distribution is packaged as an **auto-extractable executable** containing:
+
+- `plink.exe` (required for SSH communication with ESXi)
+- `esxi_shutdown.ps1` (the PowerShell script with the full logic and GUI)
+- `start.bat` (a batch file that is automatically executed and launches the PowerShell script)
+
+Upon execution, the SFX automatically extracts all required files to a temporary directory and runs `start.bat`, which initiates the management utility. This ensures a seamless and user-friendly experience, even for non-technical users.
 
 ## Features
 
 - Automatic, controlled shutdown or forced power-off of all running VMs.
 - Reboot or shutdown the ESXi host after handling all VMs.
 - SSH host fingerprint detection and management.
-- Credentials and execution log generation for full traceability.
+- Execution and error logging to `esxi_manager.log`.
 - Persistent history of ESXi host IPs for fast access.
-- Native GUI with .NET Windows Forms (no external dependencies except `plink.exe`).
+- Native Windows GUI, no external dependencies except for `plink.exe`.
 
 ## Requirements
 
 - Windows with PowerShell 5.1 or higher.
-- `plink.exe` (from PuTTY suite) must be in the same directory as the script.
+- No need for prior installation—simply execute the auto-extractable file.
 - Network connectivity to the ESXi host(s) via SSH (TCP/22).
 - Appropriate credentials with shutdown/reboot privileges on the ESXi host.
 
-## How It Works
-
-1. **SSH Key Management**: The script attempts to detect and use the ESXi host's SSH fingerprint. If not detected, it assumes the fingerprint is already trusted on the system.
-2. **Credential Verification**: User credentials are tested against the host before performing any action.
-3. **Virtual Machine Handling**: All running VMs are shut down gracefully. If a VM does not respond, a forced power-off is executed.
-4. **Host Action**: Depending on the user's choice, the ESXi host will be gracefully shut down or rebooted.
-5. **Logging**: All actions, errors, and outputs are logged to `esxi_manager.log` in the script directory.
-6. **IP History**: Previous host IPs are saved for quick future access.
-
 ## Usage
 
-1. Copy `plink.exe` and the script to the same directory.
-2. Run the PowerShell script (`.ps1` file) with sufficient privileges.
-3. Enter the ESXi host's IP, username, and password. Select **Shutdown** or **Reboot**.
-4. Click **Execute**. You will be prompted for confirmation before any action is taken.
-5. The script will manage all VMs and the host accordingly. Review `esxi_manager.log` for details.
+1. Download and run the self-extractable executable.
+2. Enter the ESXi host's IP, username, and password. Select **Shutdown** or **Reboot**.
+3. Click **Execute**. You will be prompted for confirmation before any action is taken.
+4. The script will manage all VMs and the host accordingly. Review `esxi_manager.log` for details.
 
 ## Security & Notes
 
