@@ -32,7 +32,7 @@ Al ejecutar el SFX, se extraen automáticamente todos los archivos necesarios en
 
 1. Descargue y ejecute el archivo autoextraíble.
 2. Introduzca la IP, usuario y contraseña del host ESXi. Seleccione **Shutdown** o **Reboot**.
-3. Pulse **Execute**. Aparecerá un mensaje de confirmación antes de proceder.
+3. Pulse **Execute**.
 4. El script gestionará las VMs y el host según corresponda. Revise `esxi_manager.log` para el registro detallado.
 
 ## Seguridad y recomendaciones
